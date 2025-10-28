@@ -8,7 +8,10 @@
 namespace KitchenCAD {
 
 // Forward declarations
-class Project;
+namespace Models {
+    class Project;
+}
+using Project = Models::Project;
 
 /**
  * @brief Metadata information about a project

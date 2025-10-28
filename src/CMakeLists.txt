@@ -2,6 +2,11 @@
 set(SOURCES
     main.cpp
     utils/Logger.cpp
+    models/Project.cpp
+    models/CatalogItem.cpp
+    persistence/DatabaseManager.cpp
+    persistence/SQLiteProjectRepository.cpp
+    persistence/CatalogRepository.cpp
 )
 
 # Header files for geometry system
@@ -30,6 +35,19 @@ set(INTERFACE_HEADERS
     interfaces/Interfaces.h
 )
 
+# Header files for models
+set(MODEL_HEADERS
+    models/Project.h
+    models/CatalogItem.h
+)
+
+# Header files for persistence
+set(PERSISTENCE_HEADERS
+    persistence/DatabaseManager.h
+    persistence/SQLiteProjectRepository.h
+    persistence/CatalogRepository.h
+)
+
 # Header files for core types
 set(CORE_HEADERS
     core/Shape3D.h
@@ -52,6 +70,8 @@ target_sources(KitchenCADDesigner PRIVATE
     ${UTILS_HEADERS}
     ${INTERFACE_HEADERS}
     ${CORE_HEADERS}
+    ${MODEL_HEADERS}
+    ${PERSISTENCE_HEADERS}
 )
 
 # Link Qt6 libraries
@@ -63,8 +83,11 @@ target_link_libraries(KitchenCADDesigner
     Qt6::Sql
 )
 
-# Link OpenCascade libraries
-target_link_libraries(KitchenCADDesigner ${OpenCASCADE_LIBRARIES})
+# Link OpenCascade libraries (if available)
+if(HAVE_OPENCASCADE)
+    target_link_libraries(KitchenCADDesigner ${OpenCASCADE_LIBRARIES})
+    target_compile_definitions(KitchenCADDesigner PRIVATE HAVE_OPENCASCADE)
+endif()
 
 # Link SQLite3
 target_link_libraries(KitchenCADDesigner SQLite::SQLite3)
@@ -72,6 +95,8 @@ target_link_libraries(KitchenCADDesigner SQLite::SQLite3)
 # Link nlohmann/json if found via find_package
 if(TARGET nlohmann_json::nlohmann_json)
     target_link_libraries(KitchenCADDesigner nlohmann_json::nlohmann_json)
+elseif(NLOHMANN_JSON_INCLUDE_DIR)
+    target_include_directories(KitchenCADDesigner PRIVATE ${NLOHMANN_JSON_INCLUDE_DIR})
 endif()
 
 # Set target properties

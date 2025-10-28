@@ -28,13 +28,15 @@ find_package(Qt6 REQUIRED COMPONENTS
 # Qt6 setup
 qt6_standard_project_setup()
 
-# Find OpenCascade
-find_package(OpenCASCADE REQUIRED)
+# Find OpenCascade (optional for now)
+find_package(OpenCASCADE QUIET)
 if(OpenCASCADE_FOUND)
     message(STATUS "Found OpenCASCADE version: ${OpenCASCADE_VERSION}")
     include_directories(${OpenCASCADE_INCLUDE_DIR})
+    set(HAVE_OPENCASCADE TRUE)
 else()
-    message(FATAL_ERROR "OpenCASCADE not found. Please install OpenCASCADE development libraries.")
+    message(WARNING "OpenCASCADE not found. Some features will be disabled.")
+    set(HAVE_OPENCASCADE FALSE)
 endif()
 
 # Find SQLite3
@@ -49,8 +51,24 @@ endif()
 find_package(nlohmann_json QUIET)
 if(NOT nlohmann_json_FOUND)
     message(STATUS "nlohmann/json not found via find_package, trying pkg-config")
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(nlohmann_json REQUIRED nlohmann_json)
+    find_package(PkgConfig QUIET)
+    if(PkgConfig_FOUND)
+        pkg_check_modules(nlohmann_json QUIET nlohmann_json)
+    endif()
+    
+    if(NOT nlohmann_json_FOUND)
+        message(WARNING "nlohmann/json not found. Trying to use system headers.")
+        # Try to find the header directly
+        find_path(NLOHMANN_JSON_INCLUDE_DIR nlohmann/json.hpp
+            PATHS /usr/include /usr/local/include /opt/homebrew/include
+        )
+        if(NLOHMANN_JSON_INCLUDE_DIR)
+            message(STATUS "Found nlohmann/json headers at: ${NLOHMANN_JSON_INCLUDE_DIR}")
+            set(nlohmann_json_FOUND TRUE)
+        else()
+            message(FATAL_ERROR "nlohmann/json is required but not found. Please install it.")
+        endif()
+    endif()
 endif()
 
 # Find Catch2 for testing (optional)

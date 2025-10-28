@@ -21,7 +21,7 @@
   - Crear interfaces para renderizado y exportación
   - _Requisitos: 1.1, 4.1, 6.1, 9.1_
 
-- [ ] 4. Implementar capa de persistencia con SQLite
+- [x] 4. Implementar capa de persistencia con SQLite
   - Crear DatabaseManager para gestión de conexiones SQLite
   - Implementar esquema de base de datos completo
   - Crear SQLiteProjectRepository con operaciones CRUD
@@ -29,7 +29,7 @@
   - Agregar sistema de migraciones de base de datos
   - _Requisitos: 10.1, 10.2, 10.3, 10.4, 10.5, 12.1, 12.2_
 
-- [ ] 4.1 Escribir pruebas unitarias para capa de persistencia
+- [x] 4.1 Escribir pruebas unitarias para capa de persistencia
   - Crear pruebas para DatabaseManager
   - Probar operaciones CRUD de repositorios
   - Validar integridad de datos y transacciones

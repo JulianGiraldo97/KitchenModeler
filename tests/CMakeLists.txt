@@ -10,7 +10,9 @@ endif()
 set(TEST_SOURCES
     test_main.cpp
     test_geometry.cpp
+    test_persistence_basic.cpp
     ../src/utils/Logger.cpp
+    ../src/persistence/DatabaseManager.cpp
 )
 
 # Create test executable
