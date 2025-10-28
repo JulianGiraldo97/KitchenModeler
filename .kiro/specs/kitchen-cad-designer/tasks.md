@@ -1,6 +1,6 @@
 # Plan de Implementación - Kitchen CAD Designer
 
-- [ ] 1. Configurar estructura del proyecto y sistema de build
+- [x] 1. Configurar estructura del proyecto y sistema de build
   - Crear estructura de directorios (src/, tests/, docs/, resources/)
   - Configurar CMakeLists.txt principal con dependencias Qt6, OpenCascade, SQLite
   - Configurar Dockerfile para build reproducible

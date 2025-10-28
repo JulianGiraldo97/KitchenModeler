@@ -1,0 +1,95 @@
+# Docker ignore file for Kitchen CAD Designer
+
+# Build directories
+build/
+build-*/
+cmake-build-*/
+out/
+
+# Git directory
+.git/
+.gitignore
+
+# IDE files
+.vscode/
+.vs/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+*.bak
+*.backup
+
+# Package files
+*.deb
+*.rpm
+*.dmg
+*.pkg
+*.msi
+*.zip
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+
+# Documentation (except essential)
+docs/html/
+docs/latex/
+docs/man/
+*.pdf
+
+# User-specific files
+projects/
+user_catalogs/
+user_preferences.json
+
+# Cache directories
+.cache/
+cache/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Test results
+Testing/
+test_results/
+*.xml
+*.junit
+
+# Coverage reports
+*.gcov
+*.gcda
+*.gcno
+coverage/
+
+# Keep essential files
+!README.md
+!LICENSE
+!CONTRIBUTING.md
+!CMakeLists.txt
+!Dockerfile
+!src/
+!tests/
+!resources/

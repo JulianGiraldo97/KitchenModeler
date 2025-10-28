@@ -1,0 +1,44 @@
+# Test configuration for Kitchen CAD Designer
+# This file will be populated with actual tests as development progresses
+
+if(NOT Catch2_FOUND)
+    message(WARNING "Catch2 not found, skipping test configuration")
+    return()
+endif()
+
+# Test source files (placeholder)
+set(TEST_SOURCES
+    test_main.cpp
+    # Additional test files will be added here
+)
+
+# Create test executable
+add_executable(KitchenCADDesigner_tests ${TEST_SOURCES})
+
+# Link libraries
+target_link_libraries(KitchenCADDesigner_tests
+    Catch2::Catch2WithMain
+    Qt6::Core
+    Qt6::Widgets
+    SQLite::SQLite3
+)
+
+# Link nlohmann/json if available
+if(TARGET nlohmann_json::nlohmann_json)
+    target_link_libraries(KitchenCADDesigner_tests nlohmann_json::nlohmann_json)
+endif()
+
+# Include directories
+target_include_directories(KitchenCADDesigner_tests PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/../src
+)
+
+# Add compile definitions
+target_compile_definitions(KitchenCADDesigner_tests PRIVATE
+    QT_NO_KEYWORDS
+    NOMINMAX
+)
+
+# Register tests with CTest
+include(Catch)
+catch_discover_tests(KitchenCADDesigner_tests)
