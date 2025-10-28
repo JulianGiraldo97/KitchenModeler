@@ -11,8 +11,11 @@ set(TEST_SOURCES
     test_main.cpp
     test_geometry.cpp
     test_persistence_basic.cpp
+    test_models.cpp
     ../src/utils/Logger.cpp
     ../src/persistence/DatabaseManager.cpp
+    ../src/models/Project.cpp
+    ../src/models/CatalogItem.cpp
 )
 
 # Create test executable

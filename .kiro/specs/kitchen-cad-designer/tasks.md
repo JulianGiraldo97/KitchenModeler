@@ -35,7 +35,7 @@
   - Validar integridad de datos y transacciones
   - _Requisitos: 10.1, 10.2, 10.3_
 
-- [ ] 5. Desarrollar modelos de dominio principales
+- [x] 5. Desarrollar modelos de dominio principales
   - Implementar clase Project con gestión de objetos y metadatos
   - Crear clase SceneObject como base para elementos de diseño
   - Implementar CatalogItem con especificaciones y geometría
@@ -43,7 +43,7 @@
   - Agregar serialización JSON para todos los modelos
   - _Requisitos: 1.3, 3.2, 7.1, 7.4, 8.1_
 
-- [ ] 5.1 Escribir pruebas unitarias para modelos de dominio
+- [x] 5.1 Escribir pruebas unitarias para modelos de dominio
   - Probar creación y manipulación de proyectos
   - Validar serialización/deserialización JSON
   - Probar cálculos de precios y materiales

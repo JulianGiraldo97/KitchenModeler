@@ -178,7 +178,11 @@ struct CatalogFilter {
     double maxPrice = std::numeric_limits<double>::max();
     std::vector<std::string> features;
     
-    CatalogFilter() = default;
+    CatalogFilter() {
+        maxDimensions = Dimensions3D(std::numeric_limits<double>::max(), 
+                                   std::numeric_limits<double>::max(), 
+                                   std::numeric_limits<double>::max());
+    }
     
     bool matches(const CatalogItem& item) const;
     nlohmann::json toJson() const;
