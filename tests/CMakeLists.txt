@@ -18,6 +18,15 @@ set(TEST_SOURCES
     ../src/models/CatalogItem.cpp
 )
 
+# Add OpenCascade tests if available
+if(HAVE_OPENCASCADE)
+    list(APPEND TEST_SOURCES
+        test_opencascade_geometry.cpp
+        ../src/geometry/OCCTShape3D.cpp
+        ../src/geometry/OpenCascadeGeometryEngine.cpp
+    )
+endif()
+
 # Create test executable
 add_executable(KitchenCADDesigner_tests ${TEST_SOURCES})
 
@@ -28,6 +37,12 @@ target_link_libraries(KitchenCADDesigner_tests
     Qt6::Widgets
     SQLite::SQLite3
 )
+
+# Link OpenCascade libraries if available
+if(HAVE_OPENCASCADE)
+    target_link_libraries(KitchenCADDesigner_tests ${OpenCASCADE_LIBRARIES})
+    target_compile_definitions(KitchenCADDesigner_tests PRIVATE HAVE_OPENCASCADE)
+endif()
 
 # Link nlohmann/json if available
 if(TARGET nlohmann_json::nlohmann_json)

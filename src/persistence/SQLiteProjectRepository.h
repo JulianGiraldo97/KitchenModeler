@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../interfaces/IProjectRepository.h"
+#include "../models/Project.h"
 #include "DatabaseManager.h"
 #include <memory>
 #include <unordered_map>

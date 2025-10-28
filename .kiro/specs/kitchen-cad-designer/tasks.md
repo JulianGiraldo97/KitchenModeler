@@ -49,7 +49,7 @@
   - Probar cálculos de precios y materiales
   - _Requisitos: 1.3, 7.4, 8.5_
 
-- [ ] 6. Integrar motor geométrico OpenCascade
+- [x] 6. Integrar motor geométrico OpenCascade
   - Implementar OpenCascadeGeometryEngine con operaciones básicas
   - Crear OCCTShape3D como wrapper de TopoDS_Shape
   - Implementar creación de primitivas geométricas (cajas, cilindros)
@@ -57,7 +57,7 @@
   - Implementar cálculo de bounding boxes y propiedades geométricas
   - _Requisitos: 4.4, 5.4, 9.1, 9.2, 9.3_
 
-- [ ] 6.1 Escribir pruebas de integración para motor geométrico
+- [x] 6.1 Escribir pruebas de integración para motor geométrico
   - Probar creación de geometrías básicas
   - Validar operaciones booleanas
   - Probar cálculos de propiedades geométricas

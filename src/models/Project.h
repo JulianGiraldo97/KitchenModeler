@@ -7,6 +7,7 @@
 #include "../geometry/Point3D.h"
 #include "../geometry/Vector3D.h"
 #include "../geometry/BoundingBox.h"
+#include "../geometry/Transform3D.h"
 #include "../interfaces/IProjectRepository.h"
 
 #include <nlohmann/json.hpp>
@@ -90,29 +91,8 @@ struct Opening {
     }
 };
 
-/**
- * @brief Transform information for 3D objects
- */
-struct Transform3D {
-    Point3D translation;
-    Vector3D rotation; // Euler angles in radians
-    Vector3D scale;
-    
-    Transform3D() : scale(1.0, 1.0, 1.0) {}
-    Transform3D(const Point3D& pos) : translation(pos), scale(1.0, 1.0, 1.0) {}
-    Transform3D(const Point3D& pos, const Vector3D& rot, const Vector3D& scl = Vector3D(1.0, 1.0, 1.0))
-        : translation(pos), rotation(rot), scale(scl) {}
-    
-    bool isIdentity() const {
-        return translation == Point3D(0, 0, 0) && 
-               rotation == Vector3D(0, 0, 0) && 
-               scale == Vector3D(1, 1, 1);
-    }
-    
-    Point3D transformPoint(const Point3D& point) const;
-    Transform3D inverse() const;
-    Transform3D operator*(const Transform3D& other) const;
-};
+// Use the geometry Transform3D instead of defining our own
+using Transform3D = Geometry::Transform3D;
 
 /**
  * @brief Material properties for objects

@@ -11,61 +11,7 @@ namespace Models {
 
 using json = nlohmann::json;
 
-// Transform3D implementation
-Point3D Transform3D::transformPoint(const Point3D& point) const {
-    // For simplicity, we'll implement basic transformation
-    // In a full implementation, this would use proper matrix math
-    Point3D result = point;
-    
-    // Apply scale
-    result.x *= scale.x;
-    result.y *= scale.y;
-    result.z *= scale.z;
-    
-    // Apply rotation (simplified - would need proper rotation matrices)
-    // This is a placeholder implementation
-    
-    // Apply translation
-    result.x += translation.x;
-    result.y += translation.y;
-    result.z += translation.z;
-    
-    return result;
-}
-
-Transform3D Transform3D::inverse() const {
-    Transform3D inv;
-    
-    // Inverse scale
-    inv.scale.x = (scale.x != 0.0) ? 1.0 / scale.x : 1.0;
-    inv.scale.y = (scale.y != 0.0) ? 1.0 / scale.y : 1.0;
-    inv.scale.z = (scale.z != 0.0) ? 1.0 / scale.z : 1.0;
-    
-    // Inverse rotation (negate angles for Euler)
-    inv.rotation.x = -rotation.x;
-    inv.rotation.y = -rotation.y;
-    inv.rotation.z = -rotation.z;
-    
-    // Inverse translation
-    inv.translation.x = -translation.x;
-    inv.translation.y = -translation.y;
-    inv.translation.z = -translation.z;
-    
-    return inv;
-}
-
-Transform3D Transform3D::operator*(const Transform3D& other) const {
-    Transform3D result;
-    
-    // Combine transformations (simplified)
-    result.translation = translation + other.translation;
-    result.rotation = rotation + other.rotation;
-    result.scale.x = scale.x * other.scale.x;
-    result.scale.y = scale.y * other.scale.y;
-    result.scale.z = scale.z * other.scale.z;
-    
-    return result;
-}
+// Transform3D is now using the geometry implementation
 
 // SceneObject implementation
 SceneObject::SceneObject(const std::string& catalogItemId) 

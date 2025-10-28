@@ -9,6 +9,14 @@ set(SOURCES
     persistence/CatalogRepository.cpp
 )
 
+# OpenCascade geometry sources (conditional)
+if(HAVE_OPENCASCADE)
+    list(APPEND SOURCES
+        geometry/OCCTShape3D.cpp
+        geometry/OpenCascadeGeometryEngine.cpp
+    )
+endif()
+
 # Header files for geometry system
 set(GEOMETRY_HEADERS
     geometry/Point3D.h
@@ -19,6 +27,14 @@ set(GEOMETRY_HEADERS
     geometry/GeometryUtils.h
     geometry/Geometry.h
 )
+
+# OpenCascade geometry headers (conditional)
+if(HAVE_OPENCASCADE)
+    list(APPEND GEOMETRY_HEADERS
+        geometry/OCCTShape3D.h
+        geometry/OpenCascadeGeometryEngine.h
+    )
+endif()
 
 # Header files for utilities
 set(UTILS_HEADERS
