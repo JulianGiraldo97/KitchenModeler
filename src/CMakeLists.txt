@@ -20,16 +20,39 @@ set(UTILS_HEADERS
     utils/Logger.h
 )
 
-# Include directories
-target_include_directories(KitchenCADDesigner PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
+# Header files for interfaces
+set(INTERFACE_HEADERS
+    interfaces/IGeometryEngine.h
+    interfaces/ISceneManager.h
+    interfaces/IProjectRepository.h
+    interfaces/IRenderEngine.h
+    interfaces/ICADExporter.h
+    interfaces/Interfaces.h
+)
+
+# Header files for core types
+set(CORE_HEADERS
+    core/Shape3D.h
+    core/Camera3D.h
+    core/Light.h
+    core/Material.h
 )
 
 # Create the main executable
 add_executable(KitchenCADDesigner ${SOURCES})
 
+# Include directories
+target_include_directories(KitchenCADDesigner PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
 # Add header files to the target (for IDE support)
-target_sources(KitchenCADDesigner PRIVATE ${GEOMETRY_HEADERS} ${UTILS_HEADERS})
+target_sources(KitchenCADDesigner PRIVATE 
+    ${GEOMETRY_HEADERS} 
+    ${UTILS_HEADERS}
+    ${INTERFACE_HEADERS}
+    ${CORE_HEADERS}
+)
 
 # Link Qt6 libraries
 target_link_libraries(KitchenCADDesigner

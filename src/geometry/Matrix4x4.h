@@ -200,6 +200,21 @@ public:
         return result;
     }
     
+    static Matrix4x4 orthographic(double left, double right, double bottom, double top, double near, double far) {
+        Matrix4x4 result;
+        result.data_.fill(0.0);
+        
+        result(0, 0) = 2.0 / (right - left);
+        result(1, 1) = 2.0 / (top - bottom);
+        result(2, 2) = -2.0 / (far - near);
+        result(0, 3) = -(right + left) / (right - left);
+        result(1, 3) = -(top + bottom) / (top - bottom);
+        result(2, 3) = -(far + near) / (far - near);
+        result(3, 3) = 1.0;
+        
+        return result;
+    }
+    
 private:
     double cofactor(int row, int col) const {
         // Calculate 3x3 minor determinant

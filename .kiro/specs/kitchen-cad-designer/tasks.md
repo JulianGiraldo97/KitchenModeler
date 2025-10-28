@@ -14,7 +14,7 @@
   - Implementar sistema de logging básico
   - _Requisitos: 4.4, 5.4, 6.4, 11.3_
 
-- [ ] 3. Crear interfaces principales del sistema
+- [x] 3. Crear interfaces principales del sistema
   - Definir IGeometryEngine con operaciones geométricas básicas
   - Definir ISceneManager para gestión de objetos en escena
   - Definir IProjectRepository para persistencia de proyectos
