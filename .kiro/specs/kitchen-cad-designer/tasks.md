@@ -62,6 +62,7 @@
   - Validar operaciones booleanas
   - Probar cálculos de propiedades geométricas
   - _Requisitos: 4.4, 5.4_-
+  
  [ ] 7. Implementar gestor de escena 3D
   - Crear SceneManager para gestión de objetos en escena
   - Implementar sistema de IDs únicos para objetos
@@ -137,7 +138,8 @@
   - Implementar handles visuales para transformaciones
   - Crear herramientas de alineación y distribución
   - _Requisitos: 5.1, 5.2, 5.3, 5.4, 5.5_- [ ] 15. 
-Implementar herramientas de diseño estructural
+
+  [ ] 15. Implementar herramientas de diseño estructural
   - Crear herramientas para dibujar muros con dimensiones
   - Implementar colocación de puertas y ventanas en muros
   - Agregar validación de dimensiones mínimas (>10cm)
