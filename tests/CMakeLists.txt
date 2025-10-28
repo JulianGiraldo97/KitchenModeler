@@ -6,10 +6,11 @@ if(NOT Catch2_FOUND)
     return()
 endif()
 
-# Test source files (placeholder)
+# Test source files
 set(TEST_SOURCES
     test_main.cpp
-    # Additional test files will be added here
+    test_geometry.cpp
+    ../src/utils/Logger.cpp
 )
 
 # Create test executable

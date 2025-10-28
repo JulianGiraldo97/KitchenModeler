@@ -1,13 +1,35 @@
-# Source files will be added here as development progresses
-# This is a placeholder CMakeLists.txt for the src directory
-
-# For now, create a simple main.cpp placeholder
+# Source files for Kitchen CAD Designer
 set(SOURCES
     main.cpp
+    utils/Logger.cpp
+)
+
+# Header files for geometry system
+set(GEOMETRY_HEADERS
+    geometry/Point3D.h
+    geometry/Vector3D.h
+    geometry/Matrix4x4.h
+    geometry/Transform3D.h
+    geometry/BoundingBox.h
+    geometry/GeometryUtils.h
+    geometry/Geometry.h
+)
+
+# Header files for utilities
+set(UTILS_HEADERS
+    utils/Logger.h
+)
+
+# Include directories
+target_include_directories(KitchenCADDesigner PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 # Create the main executable
 add_executable(KitchenCADDesigner ${SOURCES})
+
+# Add header files to the target (for IDE support)
+target_sources(KitchenCADDesigner PRIVATE ${GEOMETRY_HEADERS} ${UTILS_HEADERS})
 
 # Link Qt6 libraries
 target_link_libraries(KitchenCADDesigner
