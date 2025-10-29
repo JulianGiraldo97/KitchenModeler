@@ -85,7 +85,7 @@
   - Probar casos límite y errores
   - _Requisitos: 14.1, 14.2, 14.3_
 
-- [ ] 9. Crear servicios de lógica de negocio
+- [x] 9. Crear servicios de lógica de negocio
   - Implementar ProjectManager para ciclo de vida de proyectos
   - Crear CatalogService para gestión de catálogos
   - Implementar BOMGenerator para listas de materiales

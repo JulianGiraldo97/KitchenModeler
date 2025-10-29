@@ -11,6 +11,11 @@ set(SOURCES
     validation/ValidationService.cpp
     validation/ValidationRules.cpp
     validation/ValidationVisualizer.cpp
+    services/ProjectManager.cpp
+    services/CatalogService.cpp
+    services/BOMGenerator.cpp
+    services/PricingService.cpp
+    services/ConfigurationService.cpp
 )
 
 # OpenCascade geometry sources (conditional)
@@ -89,6 +94,15 @@ set(VALIDATION_HEADERS
     validation/ValidationVisualizer.h
 )
 
+# Header files for services
+set(SERVICE_HEADERS
+    services/ProjectManager.h
+    services/CatalogService.h
+    services/BOMGenerator.h
+    services/PricingService.h
+    services/ConfigurationService.h
+)
+
 # Create the main executable
 add_executable(KitchenCADDesigner ${SOURCES})
 
@@ -107,6 +121,7 @@ target_sources(KitchenCADDesigner PRIVATE
     ${PERSISTENCE_HEADERS}
     ${SCENE_HEADERS}
     ${VALIDATION_HEADERS}
+    ${SERVICE_HEADERS}
 )
 
 # Link Qt6 libraries
