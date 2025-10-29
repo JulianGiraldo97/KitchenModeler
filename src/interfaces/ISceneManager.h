@@ -12,7 +12,10 @@
 namespace KitchenCAD {
 
 // Forward declarations
-class SceneObject;
+namespace Models {
+    class SceneObject;
+}
+using SceneObject = Models::SceneObject;
 
 /**
  * @brief Unique identifier for scene objects

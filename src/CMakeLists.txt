@@ -7,6 +7,7 @@ set(SOURCES
     persistence/DatabaseManager.cpp
     persistence/SQLiteProjectRepository.cpp
     persistence/CatalogRepository.cpp
+    scene/SceneManager.cpp
 )
 
 # OpenCascade geometry sources (conditional)
@@ -72,6 +73,11 @@ set(CORE_HEADERS
     core/Material.h
 )
 
+# Header files for scene management
+set(SCENE_HEADERS
+    scene/SceneManager.h
+)
+
 # Create the main executable
 add_executable(KitchenCADDesigner ${SOURCES})
 
@@ -88,6 +94,7 @@ target_sources(KitchenCADDesigner PRIVATE
     ${CORE_HEADERS}
     ${MODEL_HEADERS}
     ${PERSISTENCE_HEADERS}
+    ${SCENE_HEADERS}
 )
 
 # Link Qt6 libraries

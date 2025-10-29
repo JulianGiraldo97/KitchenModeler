@@ -12,10 +12,12 @@ set(TEST_SOURCES
     test_geometry.cpp
     test_persistence_basic.cpp
     test_models.cpp
+    test_scene_manager.cpp
     ../src/utils/Logger.cpp
     ../src/persistence/DatabaseManager.cpp
     ../src/models/Project.cpp
     ../src/models/CatalogItem.cpp
+    ../src/scene/SceneManager.cpp
 )
 
 # Add OpenCascade tests if available

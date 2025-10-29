@@ -63,7 +63,7 @@
   - Probar cálculos de propiedades geométricas
   - _Requisitos: 4.4, 5.4_-
   
- [ ] 7. Implementar gestor de escena 3D
+ [x] 7. Implementar gestor de escena 3D
   - Crear SceneManager para gestión de objetos en escena
   - Implementar sistema de IDs únicos para objetos
   - Agregar funcionalidad de selección múltiple
