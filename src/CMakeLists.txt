@@ -21,6 +21,11 @@ set(SOURCES
     controllers/CatalogController.cpp
     controllers/ExportController.cpp
     controllers/RenderController.cpp
+    ui/MainWindow.cpp
+    ui/DesignCanvas.cpp
+    ui/CatalogPanel.cpp
+    ui/PropertiesPanel.cpp
+    ui/ProjectExplorer.cpp
 )
 
 # OpenCascade geometry sources (conditional)
@@ -117,6 +122,15 @@ set(CONTROLLER_HEADERS
     controllers/RenderController.h
 )
 
+# Header files for UI
+set(UI_HEADERS
+    ui/MainWindow.h
+    ui/DesignCanvas.h
+    ui/CatalogPanel.h
+    ui/PropertiesPanel.h
+    ui/ProjectExplorer.h
+)
+
 # Create the main executable
 add_executable(KitchenCADDesigner ${SOURCES})
 
@@ -137,6 +151,7 @@ target_sources(KitchenCADDesigner PRIVATE
     ${VALIDATION_HEADERS}
     ${SERVICE_HEADERS}
     ${CONTROLLER_HEADERS}
+    ${UI_HEADERS}
 )
 
 # Link Qt6 libraries

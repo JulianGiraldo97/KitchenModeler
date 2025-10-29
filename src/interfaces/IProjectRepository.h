@@ -4,6 +4,7 @@
 #include <vector>
 #include <optional>
 #include <memory>
+#include <chrono>
 
 namespace KitchenCAD {
 
@@ -43,6 +44,8 @@ struct ProjectMetadata {
     double roomHeight;
     double roomDepth;
     std::string templateId;  // Optional template to base project on
+    std::chrono::system_clock::time_point createdAt;
+    std::chrono::system_clock::time_point updatedAt;
     
     ProjectMetadata() = default;
     ProjectMetadata(const std::string& name, double width, double height, double depth)

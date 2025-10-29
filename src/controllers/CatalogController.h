@@ -428,7 +428,7 @@ private:
     void notifyItemRemoved(const std::string& itemId);
     void notifyItemUpdated(const std::string& itemId);
     void notifyCatalogLoaded(const std::string& message);
-    void notifyError(const std::string& error);
+    void notifyError(const std::string& error) const;
     
     /**
      * @brief Create import/export options

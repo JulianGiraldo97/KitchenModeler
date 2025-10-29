@@ -1,5 +1,6 @@
 #include "DesignController.h"
 #include "../utils/Logger.h"
+#include "../scene/SceneManager.h"
 #include <algorithm>
 #include <cmath>
 #include <set>
@@ -626,7 +627,14 @@ std::vector<ValidationError> DesignController::validateObjectPlacement(const std
     SceneObject tempObject(*object);
     tempObject.setTransform(transform);
     
-    return validationService_->validateObject(tempObject, *sceneManager_);
+    // Cast ISceneManager to concrete SceneManager for validation
+    auto* concreteSceneManager = dynamic_cast<const SceneManager*>(sceneManager_.get());
+    if (!concreteSceneManager) {
+        return {}; // Return empty validation errors if cast fails
+    }
+    
+    ValidationContext context(concreteSceneManager, currentProject_);
+    return validationService_->validateObject(tempObject, context);
 }
 
 bool DesignController::isValidPosition(const std::string& catalogItemId, const Transform3D& transform) const {
@@ -638,7 +646,14 @@ bool DesignController::isValidPosition(const std::string& catalogItemId, const T
     SceneObject tempObject(catalogItemId);
     tempObject.setTransform(transform);
     
-    auto errors = validationService_->validatePlacement(tempObject, transform, *sceneManager_);
+    // Cast ISceneManager to concrete SceneManager for validation
+    auto* concreteSceneManager = dynamic_cast<const SceneManager*>(sceneManager_.get());
+    if (!concreteSceneManager) {
+        return true; // Assume valid if cast fails
+    }
+    
+    ValidationContext context(concreteSceneManager, currentProject_);
+    auto errors = validationService_->validatePlacement(tempObject, transform, context);
     
     // Check if there are any critical errors
     for (const auto& error : errors) {

@@ -365,7 +365,7 @@ private:
     void notifyProjectSaved(const std::string& projectId);
     void notifyProjectChanged(const std::string& message);
     void notifyAutoSave(const std::string& message);
-    void notifyError(const std::string& error);
+    void notifyError(const std::string& error) const;
     
     /**
      * @brief Validate project operation parameters

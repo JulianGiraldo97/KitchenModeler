@@ -804,7 +804,7 @@ void CatalogController::notifyCatalogLoaded(const std::string& message) {
     }
 }
 
-void CatalogController::notifyError(const std::string& error) {
+void CatalogController::notifyError(const std::string& error) const {
     if (errorCallback_) {
         errorCallback_(error);
     }

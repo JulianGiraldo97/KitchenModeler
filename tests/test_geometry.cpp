@@ -25,7 +25,7 @@ TEST_CASE("Point3D basic operations", "[geometry][point3d]") {
         REQUIRE(sum.y == Approx(7.0));
         REQUIRE(sum.z == Approx(9.0));
         
-        Point3D diff = p2 - p1;
+        Vector3D diff = p2 - p1;
         REQUIRE(diff.x == Approx(3.0));
         REQUIRE(diff.y == Approx(3.0));
         REQUIRE(diff.z == Approx(3.0));

@@ -753,7 +753,7 @@ void ProjectController::notifyAutoSave(const std::string& message) {
     }
 }
 
-void ProjectController::notifyError(const std::string& error) {
+void ProjectController::notifyError(const std::string& error) const {
     if (errorCallback_) {
         errorCallback_(error);
     }

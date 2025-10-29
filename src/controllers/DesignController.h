@@ -417,6 +417,11 @@ private:
     void notifyError(const std::string& error);
     
     /**
+     * @brief Get current object position
+     */
+    Point3D getCurrentObjectPosition(const std::string& objectId) const;
+    
+    /**
      * @brief Update selection in scene manager
      */
     void updateSceneSelection();

@@ -1,14 +1,12 @@
 #include <QApplication>
-#include <QMainWindow>
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QWidget>
 #include <iostream>
 
-// Include our geometry system and logging
+// Include our UI and system components
+#include "ui/MainWindow.h"
 #include "geometry/Geometry.h"
 #include "utils/Logger.h"
 
+using namespace KitchenCAD::UI;
 using namespace KitchenCAD::Geometry;
 using namespace KitchenCAD::Utils;
 
@@ -65,6 +63,12 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
     
+    // Set application properties
+    app.setApplicationName("Kitchen CAD Designer");
+    app.setApplicationVersion("1.0.0");
+    app.setOrganizationName("Kitchen CAD Designer Team");
+    app.setOrganizationDomain("kitchencaddesigner.com");
+    
     // Initialize logging
     Logger& logger = Logger::getInstance();
     logger.setLogLevel(LogLevel::Debug);
@@ -75,33 +79,9 @@ int main(int argc, char *argv[])
     // Test our geometry system
     testGeometrySystem();
     
-    // Create a simple placeholder window
-    QMainWindow window;
-    window.setWindowTitle("Kitchen CAD Designer");
-    window.resize(800, 600);
-    
-    // Create central widget with placeholder content
-    QWidget* centralWidget = new QWidget(&window);
-    QVBoxLayout* layout = new QVBoxLayout(centralWidget);
-    
-    QLabel* label = new QLabel("Kitchen CAD Designer", centralWidget);
-    label->setAlignment(Qt::AlignCenter);
-    label->setStyleSheet("font-size: 24px; font-weight: bold; margin: 50px;");
-    
-    QLabel* subtitle = new QLabel("Geometry system initialized successfully!", centralWidget);
-    subtitle->setAlignment(Qt::AlignCenter);
-    subtitle->setStyleSheet("font-size: 14px; color: #666; margin: 20px;");
-    
-    QLabel* details = new QLabel("Check console for geometry system test results", centralWidget);
-    details->setAlignment(Qt::AlignCenter);
-    details->setStyleSheet("font-size: 12px; color: #888; margin: 10px;");
-    
-    layout->addWidget(label);
-    layout->addWidget(subtitle);
-    layout->addWidget(details);
-    
-    window.setCentralWidget(centralWidget);
-    window.show();
+    // Create and show main window
+    MainWindow mainWindow;
+    mainWindow.show();
     
     LOG_INFO("Kitchen CAD Designer UI initialized");
     

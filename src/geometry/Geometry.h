@@ -201,5 +201,10 @@ namespace GeometryOps {
     }
 }
 
+// Additional operators that require both Point3D and Vector3D to be defined
+inline Vector3D operator-(const Point3D& a, const Point3D& b) {
+    return Vector3D(a.x - b.x, a.y - b.y, a.z - b.z);
+}
+
 } // namespace Geometry
 } // namespace KitchenCAD

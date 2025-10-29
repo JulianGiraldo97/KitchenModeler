@@ -101,7 +101,7 @@
   - Agregar RenderController para control de renderizado
   - _Requisitos: 1.1, 9.1, 10.1, 11.1, 12.1_
 
-- [ ] 11. Desarrollar interfaz de usuario base con Qt6
+- [x] 11. Desarrollar interfaz de usuario base con Qt6
   - Crear MainWindow con layout principal y menús
   - Implementar DesignCanvas como widget OpenGL personalizado
   - Crear CatalogPanel para navegación de catálogos
