@@ -16,6 +16,11 @@ set(SOURCES
     services/BOMGenerator.cpp
     services/PricingService.cpp
     services/ConfigurationService.cpp
+    controllers/DesignController.cpp
+    controllers/ProjectController.cpp
+    controllers/CatalogController.cpp
+    controllers/ExportController.cpp
+    controllers/RenderController.cpp
 )
 
 # OpenCascade geometry sources (conditional)
@@ -103,6 +108,15 @@ set(SERVICE_HEADERS
     services/ConfigurationService.h
 )
 
+# Header files for controllers
+set(CONTROLLER_HEADERS
+    controllers/DesignController.h
+    controllers/ProjectController.h
+    controllers/CatalogController.h
+    controllers/ExportController.h
+    controllers/RenderController.h
+)
+
 # Create the main executable
 add_executable(KitchenCADDesigner ${SOURCES})
 
@@ -122,6 +136,7 @@ target_sources(KitchenCADDesigner PRIVATE
     ${SCENE_HEADERS}
     ${VALIDATION_HEADERS}
     ${SERVICE_HEADERS}
+    ${CONTROLLER_HEADERS}
 )
 
 # Link Qt6 libraries

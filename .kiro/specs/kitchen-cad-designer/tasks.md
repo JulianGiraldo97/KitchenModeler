@@ -93,7 +93,7 @@
   - Agregar ConfigurationService para preferencias de usuario
   - _Requisitos: 1.1, 3.1, 8.1, 8.2, 15.1, 15.2, 15.3, 15.4_
 
-- [ ] 10. Implementar controladores de aplicación
+- [x] 10. Implementar controladores de aplicación
   - Crear DesignController para lógica de diseño
   - Implementar ProjectController para operaciones de proyecto
   - Crear CatalogController para gestión de catálogos
