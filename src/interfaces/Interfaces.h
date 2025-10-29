@@ -14,6 +14,7 @@
 #include "IProjectRepository.h"
 #include "IRenderEngine.h"
 #include "ICADExporter.h"
+#include "IValidationService.h"
 
 // Supporting types
 #include "../core/Shape3D.h"
@@ -40,6 +41,7 @@ public:
     virtual std::unique_ptr<IProjectRepository> createProjectRepository(const std::string& databasePath) = 0;
     virtual std::unique_ptr<IRenderEngine> createRenderEngine() = 0;
     virtual std::unique_ptr<ICADExporter> createCADExporter() = 0;
+    virtual std::unique_ptr<IValidationService> createValidationService() = 0;
 };
 
 } // namespace KitchenCAD

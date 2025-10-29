@@ -8,6 +8,9 @@ set(SOURCES
     persistence/SQLiteProjectRepository.cpp
     persistence/CatalogRepository.cpp
     scene/SceneManager.cpp
+    validation/ValidationService.cpp
+    validation/ValidationRules.cpp
+    validation/ValidationVisualizer.cpp
 )
 
 # OpenCascade geometry sources (conditional)
@@ -49,6 +52,7 @@ set(INTERFACE_HEADERS
     interfaces/IProjectRepository.h
     interfaces/IRenderEngine.h
     interfaces/ICADExporter.h
+    interfaces/IValidationService.h
     interfaces/Interfaces.h
 )
 
@@ -78,6 +82,13 @@ set(SCENE_HEADERS
     scene/SceneManager.h
 )
 
+# Header files for validation
+set(VALIDATION_HEADERS
+    validation/ValidationService.h
+    validation/ValidationRules.h
+    validation/ValidationVisualizer.h
+)
+
 # Create the main executable
 add_executable(KitchenCADDesigner ${SOURCES})
 
@@ -95,6 +106,7 @@ target_sources(KitchenCADDesigner PRIVATE
     ${MODEL_HEADERS}
     ${PERSISTENCE_HEADERS}
     ${SCENE_HEADERS}
+    ${VALIDATION_HEADERS}
 )
 
 # Link Qt6 libraries

@@ -71,7 +71,7 @@
   - Crear sistema de transformaciones y manipulación de objetos
   - _Requisitos: 4.1, 4.2, 4.3, 5.1, 5.2, 5.3_
 
-- [ ] 8. Desarrollar sistema de validación y restricciones
+- [x] 8. Desarrollar sistema de validación y restricciones
   - Implementar ValidationService con reglas de diseño
   - Crear validadores para colisiones y superposiciones
   - Agregar validación de dimensiones y espacios mínimos
@@ -79,7 +79,7 @@
   - Crear validadores específicos para módulos de cocina
   - _Requisitos: 14.1, 14.2, 14.3, 14.4, 14.5_
 
-- [ ] 8.1 Escribir pruebas para sistema de validación
+- [x] 8.1 Escribir pruebas para sistema de validación
   - Probar detección de colisiones
   - Validar restricciones de dimensiones
   - Probar casos límite y errores

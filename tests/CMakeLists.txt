@@ -13,11 +13,15 @@ set(TEST_SOURCES
     test_persistence_basic.cpp
     test_models.cpp
     test_scene_manager.cpp
+    test_validation.cpp
     ../src/utils/Logger.cpp
     ../src/persistence/DatabaseManager.cpp
     ../src/models/Project.cpp
     ../src/models/CatalogItem.cpp
     ../src/scene/SceneManager.cpp
+    ../src/validation/ValidationService.cpp
+    ../src/validation/ValidationRules.cpp
+    ../src/validation/ValidationVisualizer.cpp
 )
 
 # Add OpenCascade tests if available
