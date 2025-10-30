@@ -2,22 +2,30 @@
 
 #include <QOpenGLWidget>
 #include <QOpenGLFunctions>
+#include <QOpenGLShaderProgram>
+#include <QOpenGLBuffer>
+#include <QOpenGLVertexArrayObject>
 #include <QMatrix4x4>
 #include <QVector3D>
 #include <QMouseEvent>
 #include <QWheelEvent>
 #include <QKeyEvent>
 #include <QTimer>
-#include <QTime>
+#include <QElapsedTimer>
 #include <memory>
 
 // Forward declarations
-namespace KitchenCAD::Scene {
-    class SceneManager;
-}
-
-namespace KitchenCAD::Core {
+namespace KitchenCAD {
     class Camera3D;
+    
+    namespace Scene {
+        class SceneManager;
+    }
+    
+    namespace Geometry {
+        struct Vector3D;
+        struct Point3D;
+    }
 }
 
 namespace KitchenCAD::UI {
@@ -38,6 +46,7 @@ enum class InteractionMode {
 class DesignCanvas : public QOpenGLWidget, protected QOpenGLFunctions
 {
     Q_OBJECT
+    Q_DISABLE_COPY(DesignCanvas)
 
 public:
     explicit DesignCanvas(QWidget *parent = nullptr);
@@ -123,10 +132,29 @@ private:
     void updateViewMatrix();
     
     // Setup methods
+    void setupShaders();
     void setupLighting();
     void setupMaterials();
     void createGridVBO();
     void createAxesVBO();
+    void setupPickingFramebuffer();
+    
+    // Rendering helper methods
+    void renderPlaceholderObjects();
+    void renderSelectionBox();
+    void renderSelectionHighlights();
+    void renderFPSCounter();
+    void renderCoordinateDisplay();
+    void renderViewModeIndicator();
+    
+    // Object picking
+    QString performObjectPicking(const QPoint& screenPos);
+    
+    // Utility conversion methods
+    QVector3D toQt(const KitchenCAD::Geometry::Vector3D& v) const;
+    QVector3D toQt(const KitchenCAD::Geometry::Point3D& p) const;
+    KitchenCAD::Geometry::Vector3D fromQt(const QVector3D& v) const;
+    KitchenCAD::Geometry::Point3D fromQtPoint(const QVector3D& v) const;
 
 private:
     // View state
@@ -134,7 +162,7 @@ private:
     InteractionMode m_interactionMode;
     
     // Camera and matrices
-    std::unique_ptr<KitchenCAD::Core::Camera3D> m_camera;
+    std::unique_ptr<KitchenCAD::Camera3D> m_camera;
     QMatrix4x4 m_projectionMatrix;
     QMatrix4x4 m_viewMatrix;
     QMatrix4x4 m_modelMatrix;
@@ -186,7 +214,7 @@ private:
     
     // Performance
     int m_frameCount;
-    QTime m_frameTimer;
+    QElapsedTimer m_frameTimer;
     float m_fps;
     
     // 2D view specific
@@ -198,6 +226,24 @@ private:
     QColor m_gridColor;
     QColor m_axesColors[3]; // X, Y, Z
     QColor m_selectionColor;
+    
+    // Shader programs
+    std::unique_ptr<QOpenGLShaderProgram> m_gridShader;
+    std::unique_ptr<QOpenGLShaderProgram> m_axesShader;
+    std::unique_ptr<QOpenGLShaderProgram> m_objectShader;
+    std::unique_ptr<QOpenGLShaderProgram> m_selectionShader;
+    
+    // Grid data
+    std::vector<float> m_gridVertices;
+    int m_gridLineCount;
+    
+    // Axes data
+    std::vector<float> m_axesVertices;
+    
+    // Object picking
+    unsigned int m_pickingFramebuffer;
+    unsigned int m_pickingTexture;
+    unsigned int m_pickingDepthBuffer;
 };
 
 } // namespace KitchenCAD::UI

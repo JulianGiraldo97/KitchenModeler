@@ -25,6 +25,14 @@ find_package(Qt6 REQUIRED COMPONENTS
     Sql
 )
 
+# Find Qt6::Test for testing (optional)
+find_package(Qt6 QUIET COMPONENTS Test)
+if(Qt6Test_FOUND)
+    message(STATUS "Found Qt6::Test for UI testing")
+else()
+    message(WARNING "Qt6::Test not found. UI tests will be limited.")
+endif()
+
 # Qt6 setup
 qt6_standard_project_setup()
 

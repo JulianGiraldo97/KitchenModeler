@@ -14,6 +14,7 @@ set(TEST_SOURCES
     test_models.cpp
     test_scene_manager.cpp
     test_validation.cpp
+    test_ui_design_canvas.cpp
     ../src/utils/Logger.cpp
     ../src/persistence/DatabaseManager.cpp
     ../src/models/Project.cpp
@@ -22,6 +23,7 @@ set(TEST_SOURCES
     ../src/validation/ValidationService.cpp
     ../src/validation/ValidationRules.cpp
     ../src/validation/ValidationVisualizer.cpp
+    ../src/ui/DesignCanvas.cpp
 )
 
 # Add OpenCascade tests if available
@@ -41,8 +43,16 @@ target_link_libraries(KitchenCADDesigner_tests
     Catch2::Catch2WithMain
     Qt6::Core
     Qt6::Widgets
+    Qt6::OpenGL
+    Qt6::OpenGLWidgets
     SQLite::SQLite3
 )
+
+# Link Qt6::Test if available
+if(TARGET Qt6::Test)
+    target_link_libraries(KitchenCADDesigner_tests Qt6::Test)
+    target_compile_definitions(KitchenCADDesigner_tests PRIVATE HAVE_QT_TEST)
+endif()
 
 # Link OpenCascade libraries if available
 if(HAVE_OPENCASCADE)

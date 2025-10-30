@@ -109,7 +109,7 @@
   - Agregar ProjectExplorer para gestión de archivos
   - _Requisitos: 3.3, 6.1, 6.2, 7.1, 12.3_
 
-- [ ] 12. Implementar visualización 2D/3D
+- [x] 12. Implementar visualización 2D/3D
   - Configurar contexto OpenGL en DesignCanvas
   - Implementar cámara 3D con controles de navegación
   - Crear sistema de renderizado básico para geometrías
@@ -117,7 +117,7 @@
   - Implementar selección visual de objetos
   - _Requisitos: 6.1, 6.2, 6.3, 6.4, 6.5_
 
-- [ ] 12.1 Escribir pruebas de interfaz de usuario
+- [x] 12.1 Escribir pruebas de interfaz de usuario
   - Probar interacciones básicas de UI
   - Validar sincronización entre vistas 2D/3D
   - Probar controles de cámara y navegación
