@@ -123,7 +123,7 @@
   - Probar controles de cámara y navegación
   - _Requisitos: 6.1, 6.2, 6.3_
 
-- [ ] 13. Implementar funcionalidad de arrastrar y soltar
+- [x] 13. Implementar funcionalidad de arrastrar y soltar
   - Crear sistema de drag & drop desde catálogo a canvas
   - Implementar vista previa durante arrastre
   - Agregar validación de posición durante colocación

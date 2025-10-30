@@ -224,7 +224,7 @@ void CatalogPanel::setupFilters()
 void CatalogPanel::setupItemList()
 {
     // Item list
-    m_itemList = new QListWidget(this);
+    m_itemList = new CatalogListWidget(this);
     m_itemList->setDragDropMode(QAbstractItemView::DragOnly);
     m_itemList->setDefaultDropAction(Qt::CopyAction);
     m_itemList->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -310,6 +310,11 @@ void CatalogPanel::connectSignals()
     // Item list
     connect(m_itemList, &QListWidget::itemSelectionChanged, this, &CatalogPanel::onItemSelectionChanged);
     connect(m_itemList, &QListWidget::itemDoubleClicked, this, &CatalogPanel::onItemDoubleClicked);
+    connect(m_itemList, &CatalogListWidget::itemDragStarted, this, &CatalogPanel::itemDragStarted);
+    
+    // Enable drag and drop
+    m_itemList->setDragEnabled(true);
+    m_itemList->setDragDropMode(QAbstractItemView::DragOnly);
     
     // Controls
     connect(m_refreshButton, &QPushButton::clicked, this, &CatalogPanel::refreshCatalog);
@@ -637,6 +642,46 @@ void CatalogItemWidget::paintEvent(QPaintEvent* event)
 void CatalogItemWidget::updateDisplay()
 {
     update();
+}
+
+// CatalogListWidget implementation
+CatalogListWidget::CatalogListWidget(QWidget* parent)
+    : QListWidget(parent)
+{
+    setDragEnabled(true);
+    setDragDropMode(QAbstractItemView::DragOnly);
+    setDefaultDropAction(Qt::CopyAction);
+}
+
+void CatalogListWidget::startDrag(Qt::DropActions supportedActions)
+{
+    QListWidgetItem* item = currentItem();
+    if (!item) {
+        return;
+    }
+    
+    QString itemId = item->data(Qt::UserRole).toString();
+    if (!itemId.isEmpty()) {
+        emit itemDragStarted(itemId);
+    }
+    
+    QListWidget::startDrag(supportedActions);
+}
+
+QMimeData* CatalogListWidget::mimeData(const QList<QListWidgetItem*>& items) const
+{
+    if (items.isEmpty()) {
+        return nullptr;
+    }
+    
+    QMimeData* mimeData = new QMimeData();
+    
+    // Set the catalog item ID as mime data
+    QString itemId = items.first()->data(Qt::UserRole).toString();
+    mimeData->setText(itemId);
+    mimeData->setData("application/x-catalog-item", itemId.toUtf8());
+    
+    return mimeData;
 }
 
 #include "CatalogPanel.moc"

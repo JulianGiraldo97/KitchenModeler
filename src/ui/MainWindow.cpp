@@ -316,6 +316,12 @@ void MainWindow::connectSignals()
     connect(m_designCanvas, &DesignCanvas::objectsChanged, this, &MainWindow::onObjectsChanged);
     connect(m_designCanvas, &DesignCanvas::viewChanged, this, &MainWindow::onViewChanged);
     
+    // Connect catalog panel signals
+    connect(m_catalogPanel, &CatalogPanel::itemDragStarted, 
+            [this](const QString& itemId) {
+                LOG_DEBUG("Catalog item drag started: " + itemId.toStdString());
+            });
+    
     // Connect controller signals
     connect(m_projectController.get(), &ProjectController::projectChanged, this, &MainWindow::onProjectChanged);
     connect(m_projectController.get(), &ProjectController::projectSaved, this, &MainWindow::onProjectSaved);

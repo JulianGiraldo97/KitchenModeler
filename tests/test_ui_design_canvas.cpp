@@ -304,6 +304,129 @@ TEST_CASE_METHOD(DesignCanvasTestFixture, "2D/3D view synchronization", "[ui][ca
     }
 }
 
+TEST_CASE_METHOD(DesignCanvasTestFixture, "Drag and drop functionality", "[ui][canvas][dragdrop]") {
+    SECTION("Drag preview initialization") {
+        QString catalogItemId = "test_cabinet_60";
+        
+        // Start drag preview
+        canvas->startDragPreview(catalogItemId);
+        
+        REQUIRE(canvas->isDragPreviewActive() == true);
+    }
+    
+    SECTION("Drag preview position update") {
+        QString catalogItemId = "test_cabinet_60";
+        canvas->startDragPreview(catalogItemId);
+        
+        // Update drag preview position
+        QPoint screenPos(100, 100);
+        canvas->updateDragPreview(screenPos);
+        
+        REQUIRE(canvas->isDragPreviewActive() == true);
+    }
+    
+    SECTION("End drag preview") {
+        QString catalogItemId = "test_cabinet_60";
+        canvas->startDragPreview(catalogItemId);
+        
+        // End drag preview without placing
+        canvas->endDragPreview(false);
+        
+        REQUIRE(canvas->isDragPreviewActive() == false);
+    }
+    
+    SECTION("Drag preview with placement") {
+        QString catalogItemId = "test_cabinet_60";
+        QSignalSpy objectsChangedSpy(canvas.get(), &DesignCanvas::objectsChanged);
+        
+        canvas->startDragPreview(catalogItemId);
+        canvas->updateDragPreview(QPoint(200, 200));
+        canvas->endDragPreview(true); // Place the object
+        
+        REQUIRE(canvas->isDragPreviewActive() == false);
+        REQUIRE(objectsChangedSpy.count() == 1);
+    }
+}
+
+TEST_CASE_METHOD(DesignCanvasTestFixture, "Grid snapping", "[ui][canvas][grid][snap]") {
+    SECTION("Snap to grid when enabled") {
+        canvas->setSnapToGrid(true);
+        canvas->setGridSize(1.0f);
+        
+        // Test position that should be snapped
+        QVector3D position(1.3f, 2.7f, 0.0f);
+        QVector3D snapped = canvas->snapToGrid(position);
+        
+        REQUIRE(snapped.x() == 1.0f);
+        REQUIRE(snapped.y() == 3.0f);
+        REQUIRE(snapped.z() == 0.0f);
+    }
+    
+    SECTION("No snapping when disabled") {
+        canvas->setSnapToGrid(false);
+        
+        QVector3D position(1.3f, 2.7f, 0.0f);
+        QVector3D result = canvas->snapToGrid(position);
+        
+        REQUIRE(result == position);
+    }
+    
+    SECTION("Different grid sizes") {
+        canvas->setSnapToGrid(true);
+        canvas->setGridSize(0.5f);
+        
+        QVector3D position(1.3f, 2.7f, 0.0f);
+        QVector3D snapped = canvas->snapToGrid(position);
+        
+        REQUIRE(snapped.x() == 1.5f);
+        REQUIRE(snapped.y() == 2.5f);
+    }
+}
+
+TEST_CASE_METHOD(DesignCanvasTestFixture, "Position validation", "[ui][canvas][validation]") {
+    SECTION("Valid position within bounds") {
+        QString catalogItemId = "test_cabinet_60";
+        QVector3D position(5.0f, 5.0f, 0.0f);
+        
+        bool isValid = canvas->isValidPlacement(catalogItemId, position);
+        
+        REQUIRE(isValid == true);
+    }
+    
+    SECTION("Invalid position - too far from origin") {
+        QString catalogItemId = "test_cabinet_60";
+        QVector3D position(100.0f, 100.0f, 0.0f);
+        
+        bool isValid = canvas->isValidPlacement(catalogItemId, position);
+        
+        REQUIRE(isValid == false);
+    }
+    
+    SECTION("Invalid position - below ground") {
+        QString catalogItemId = "test_cabinet_60";
+        QVector3D position(5.0f, 5.0f, -1.0f);
+        
+        bool isValid = canvas->isValidPlacement(catalogItemId, position);
+        
+        REQUIRE(isValid == false);
+    }
+    
+    SECTION("Position validation with snapping") {
+        canvas->setSnapToGrid(true);
+        canvas->setGridSize(1.0f);
+        
+        QString catalogItemId = "test_cabinet_60";
+        QVector3D position(5.3f, 5.7f, 2.0f);
+        
+        QVector3D validated = canvas->getValidatedPosition(catalogItemId, position);
+        
+        // Should be snapped to grid and placed on ground
+        REQUIRE(validated.x() == 5.0f);
+        REQUIRE(validated.y() == 6.0f);
+        REQUIRE(validated.z() == 0.0f);
+    }
+}
+
 TEST_CASE_METHOD(DesignCanvasTestFixture, "Performance and rendering", "[ui][canvas][performance]") {
     SECTION("Multiple rapid updates don't crash") {
         for (int i = 0; i < 10; ++i) {
@@ -328,6 +451,25 @@ TEST_CASE_METHOD(DesignCanvasTestFixture, "Performance and rendering", "[ui][can
 #ifdef HAVE_QT_TEST
         QTest::qWait(50);
 #endif
+        
+        REQUIRE(true); // Test passes if no crash occurs
+    }
+    
+    SECTION("Drag preview rendering performance") {
+        QString catalogItemId = "test_cabinet_60";
+        
+        // Start drag preview and update multiple times
+        canvas->startDragPreview(catalogItemId);
+        
+        for (int i = 0; i < 20; ++i) {
+            canvas->updateDragPreview(QPoint(100 + i * 5, 100 + i * 5));
+            canvas->update();
+#ifdef HAVE_QT_TEST
+            QTest::qWait(5);
+#endif
+        }
+        
+        canvas->endDragPreview(false);
         
         REQUIRE(true); // Test passes if no crash occurs
     }

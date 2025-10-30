@@ -74,6 +74,12 @@ public:
     void addObjectToScene(const QString& catalogItemId, const QVector3D& position);
     void removeObjectFromScene(const QString& objectId);
     
+    // Drag and drop support
+    void startDragPreview(const QString& catalogItemId);
+    void updateDragPreview(const QPoint& position);
+    void endDragPreview(bool place = false);
+    bool isDragPreviewActive() const { return m_dragPreviewActive; }
+    
     // Grid and snapping
     void setGridVisible(bool visible);
     bool isGridVisible() const { return m_gridVisible; }
@@ -97,6 +103,12 @@ protected:
     void wheelEvent(QWheelEvent *event) override;
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
+    
+    // Drag and drop events
+    void dragEnterEvent(QDragEnterEvent *event) override;
+    void dragMoveEvent(QDragMoveEvent *event) override;
+    void dragLeaveEvent(QDragLeaveEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
 
 Q_SIGNALS:
     void objectSelected(const QString& objectId);
@@ -127,7 +139,6 @@ private:
     // Utility methods
     QVector3D screenToWorld(const QPoint& screenPos);
     QPoint worldToScreen(const QVector3D& worldPos);
-    QVector3D snapToGrid(const QVector3D& position);
     void updateProjectionMatrix();
     void updateViewMatrix();
     
@@ -143,6 +154,8 @@ private:
     void renderPlaceholderObjects();
     void renderSelectionBox();
     void renderSelectionHighlights();
+    void renderDragPreview();
+    void renderValidationFeedback();
     void renderFPSCounter();
     void renderCoordinateDisplay();
     void renderViewModeIndicator();
@@ -155,6 +168,14 @@ private:
     QVector3D toQt(const KitchenCAD::Geometry::Point3D& p) const;
     KitchenCAD::Geometry::Vector3D fromQt(const QVector3D& v) const;
     KitchenCAD::Geometry::Point3D fromQtPoint(const QVector3D& v) const;
+    
+public:
+    // Validation methods (public for testing)
+    bool isValidPlacement(const QString& catalogItemId, const QVector3D& position) const;
+    QVector3D getValidatedPosition(const QString& catalogItemId, const QVector3D& position) const;
+    QVector3D snapToGrid(const QVector3D& position) const;
+
+private:
 
 private:
     // View state
@@ -226,6 +247,15 @@ private:
     QColor m_gridColor;
     QColor m_axesColors[3]; // X, Y, Z
     QColor m_selectionColor;
+    QColor m_validPlacementColor;
+    QColor m_invalidPlacementColor;
+    
+    // Drag and drop state
+    bool m_dragPreviewActive;
+    QString m_dragPreviewItemId;
+    QVector3D m_dragPreviewPosition;
+    QPoint m_lastDragPosition;
+    bool m_dragPreviewValid;
     
     // Shader programs
     std::unique_ptr<QOpenGLShaderProgram> m_gridShader;

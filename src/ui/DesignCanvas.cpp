@@ -10,6 +10,11 @@
 #include <QOpenGLVertexArrayObject>
 #include <QTime>
 #include <QApplication>
+#include <QDragEnterEvent>
+#include <QDragMoveEvent>
+#include <QDragLeaveEvent>
+#include <QDropEvent>
+#include <QMimeData>
 #include <cmath>
 
 using namespace KitchenCAD::UI;
@@ -47,6 +52,10 @@ DesignCanvas::DesignCanvas(QWidget *parent)
     , m_backgroundColor(64, 64, 64)
     , m_gridColor(128, 128, 128)
     , m_selectionColor(255, 165, 0) // Orange
+    , m_validPlacementColor(0, 255, 0, 128) // Semi-transparent green
+    , m_invalidPlacementColor(255, 0, 0, 128) // Semi-transparent red
+    , m_dragPreviewActive(false)
+    , m_dragPreviewValid(false)
 {
     LOG_INFO("Initializing DesignCanvas");
     
@@ -81,6 +90,9 @@ DesignCanvas::DesignCanvas(QWidget *parent)
     // Enable mouse tracking and keyboard focus
     setMouseTracking(true);
     setFocusPolicy(Qt::StrongFocus);
+    
+    // Enable drag and drop
+    setAcceptDrops(true);
     
     // Start frame timer
     m_frameTimer.start();
@@ -228,6 +240,12 @@ void DesignCanvas::render3D()
     
     // Render selection
     renderSelection();
+    
+    // Render drag preview if active
+    if (m_dragPreviewActive) {
+        renderDragPreview();
+        renderValidationFeedback();
+    }
     
     // Render UI overlays
     renderUI();
@@ -647,7 +665,7 @@ QPoint DesignCanvas::worldToScreen(const QVector3D& worldPos)
     return QPoint(screenX, screenY);
 }
 
-QVector3D DesignCanvas::snapToGrid(const QVector3D& position)
+QVector3D DesignCanvas::snapToGrid(const QVector3D& position) const
 {
     if (!m_snapToGrid) {
         return position;
@@ -1108,6 +1126,210 @@ void DesignCanvas::renderCoordinateDisplay()
 void DesignCanvas::renderViewModeIndicator()
 {
     // TODO: Render view mode indicator using QPainter overlay
+}
+
+// Drag and drop event handlers
+void DesignCanvas::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasFormat("application/x-catalog-item")) {
+        QString itemId = event->mimeData()->data("application/x-catalog-item");
+        startDragPreview(itemId);
+        event->acceptProposedAction();
+    } else {
+        event->ignore();
+    }
+}
+
+void DesignCanvas::dragMoveEvent(QDragMoveEvent *event)
+{
+    if (m_dragPreviewActive) {
+        updateDragPreview(event->position().toPoint());
+        event->acceptProposedAction();
+        update();
+    } else {
+        event->ignore();
+    }
+}
+
+void DesignCanvas::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    endDragPreview(false);
+    event->accept();
+    update();
+}
+
+void DesignCanvas::dropEvent(QDropEvent *event)
+{
+    if (m_dragPreviewActive && m_dragPreviewValid) {
+        // Place the object at the validated position
+        addObjectToScene(m_dragPreviewItemId, m_dragPreviewPosition);
+        event->acceptProposedAction();
+    } else {
+        event->ignore();
+    }
+    
+    endDragPreview(false);
+    update();
+}
+
+// Drag preview methods
+void DesignCanvas::startDragPreview(const QString& catalogItemId)
+{
+    m_dragPreviewActive = true;
+    m_dragPreviewItemId = catalogItemId;
+    m_dragPreviewPosition = QVector3D(0, 0, 0);
+    m_dragPreviewValid = false;
+    
+    LOG_DEBUG("Started drag preview for item: " + catalogItemId.toStdString());
+}
+
+void DesignCanvas::updateDragPreview(const QPoint& position)
+{
+    if (!m_dragPreviewActive) {
+        return;
+    }
+    
+    m_lastDragPosition = position;
+    
+    // Convert screen position to world position
+    QVector3D worldPos = screenToWorld(position);
+    
+    // Validate and snap to grid
+    QVector3D validatedPos = getValidatedPosition(m_dragPreviewItemId, worldPos);
+    m_dragPreviewPosition = validatedPos;
+    
+    // Check if placement is valid
+    m_dragPreviewValid = isValidPlacement(m_dragPreviewItemId, validatedPos);
+    
+    LOG_DEBUG("Updated drag preview position: (" + 
+              std::to_string(validatedPos.x()) + ", " + 
+              std::to_string(validatedPos.y()) + ", " + 
+              std::to_string(validatedPos.z()) + ") Valid: " + 
+              (m_dragPreviewValid ? "true" : "false"));
+}
+
+void DesignCanvas::endDragPreview(bool place)
+{
+    if (!m_dragPreviewActive) {
+        return;
+    }
+    
+    if (place && m_dragPreviewValid) {
+        addObjectToScene(m_dragPreviewItemId, m_dragPreviewPosition);
+    }
+    
+    m_dragPreviewActive = false;
+    m_dragPreviewItemId.clear();
+    m_dragPreviewValid = false;
+    
+    LOG_DEBUG("Ended drag preview");
+}
+
+// Validation methods
+bool DesignCanvas::isValidPlacement(const QString& catalogItemId, const QVector3D& position) const
+{
+    // Basic validation - check if position is within scene bounds
+    // In a real implementation, this would check for collisions with other objects
+    
+    // For now, just check if position is reasonable (not too far from origin)
+    const float maxDistance = 50.0f; // 50 meters from origin
+    float distance = position.length();
+    
+    if (distance > maxDistance) {
+        return false;
+    }
+    
+    // Check if position is above ground (Z >= 0)
+    if (position.z() < 0.0f) {
+        return false;
+    }
+    
+    // TODO: Add collision detection with existing objects
+    // TODO: Add validation against room boundaries
+    // TODO: Add catalog item specific validation rules
+    
+    return true;
+}
+
+QVector3D DesignCanvas::getValidatedPosition(const QString& catalogItemId, const QVector3D& position) const
+{
+    QVector3D validatedPos = position;
+    
+    // Snap to grid if enabled
+    if (m_snapToGrid) {
+        validatedPos = snapToGrid(validatedPos);
+    }
+    
+    // Ensure object is placed on the ground (Z = 0 for floor objects)
+    // TODO: This should be configurable based on object type
+    validatedPos.setZ(0.0f);
+    
+    return validatedPos;
+}
+
+// Rendering methods for drag preview
+void DesignCanvas::renderDragPreview()
+{
+    if (!m_dragPreviewActive || !m_objectShader) {
+        return;
+    }
+    
+    m_objectShader->bind();
+    
+    // Set up transformation matrix for preview object
+    QMatrix4x4 modelMatrix;
+    modelMatrix.translate(m_dragPreviewPosition);
+    
+    // Set uniforms
+    m_objectShader->setUniformValue("u_modelMatrix", modelMatrix);
+    m_objectShader->setUniformValue("u_viewMatrix", m_viewMatrix);
+    m_objectShader->setUniformValue("u_projectionMatrix", m_projectionMatrix);
+    
+    // Set preview color based on validity
+    QVector3D previewColor = m_dragPreviewValid ? 
+        QVector3D(0.0f, 1.0f, 0.0f) :  // Green for valid
+        QVector3D(1.0f, 0.0f, 0.0f);   // Red for invalid
+    
+    m_objectShader->setUniformValue("u_objectColor", previewColor);
+    
+    // Set lighting
+    QVector3D lightDir = QVector3D(0.5f, 1.0f, 0.5f).normalized();
+    m_objectShader->setUniformValue("u_lightDirection", lightDir);
+    m_objectShader->setUniformValue("u_lightColor", QVector3D(1.0f, 1.0f, 1.0f));
+    m_objectShader->setUniformValue("u_ambientColor", QVector3D(0.3f, 0.3f, 0.3f));
+    
+    // Render a placeholder cube for the preview
+    // TODO: Load actual geometry from catalog item
+    // For now, render a simple wireframe cube
+    
+    m_objectShader->release();
+}
+
+void DesignCanvas::renderValidationFeedback()
+{
+    if (!m_dragPreviewActive) {
+        return;
+    }
+    
+    // Render visual feedback around the preview position
+    // This could include:
+    // - Grid highlighting
+    // - Collision indicators
+    // - Dimension guides
+    // - Snap indicators
+    
+    // For now, render a simple circle on the ground plane
+    if (m_gridShader) {
+        m_gridShader->bind();
+        
+        QColor feedbackColor = m_dragPreviewValid ? m_validPlacementColor : m_invalidPlacementColor;
+        m_gridShader->setUniformValue("u_color", feedbackColor);
+        m_gridShader->setUniformValue("u_mvpMatrix", m_projectionMatrix * m_viewMatrix);
+        
+        // TODO: Render feedback geometry (circle, square, etc.)
+        
+        m_gridShader->release();
+    }
 }
 
 // Utility conversion methods

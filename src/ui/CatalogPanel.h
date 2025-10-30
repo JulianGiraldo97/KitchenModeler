@@ -27,6 +27,7 @@ namespace KitchenCAD::Models {
 namespace KitchenCAD::UI {
 
 class CatalogItemWidget;
+class CatalogListWidget;
 
 class CatalogPanel : public QWidget
 {
@@ -113,7 +114,7 @@ private:
     QSpinBox* m_priceMaxSpin;
     
     // Item display
-    QListWidget* m_itemList;
+    CatalogListWidget* m_itemList;
     
     // Status
     QLabel* m_statusLabel;
@@ -154,6 +155,24 @@ private:
         Height,
         Depth
     } m_sortOrder;
+};
+
+/**
+ * @brief Custom QListWidget that supports drag operations for catalog items
+ */
+class CatalogListWidget : public QListWidget
+{
+    Q_OBJECT
+
+public:
+    explicit CatalogListWidget(QWidget* parent = nullptr);
+
+Q_SIGNALS:
+    void itemDragStarted(const QString& itemId);
+
+protected:
+    void startDrag(Qt::DropActions supportedActions) override;
+    QMimeData* mimeData(const QList<QListWidgetItem*>& items) const override;
 };
 
 class CatalogItemWidget : public QWidget
